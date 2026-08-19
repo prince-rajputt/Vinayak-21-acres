@@ -4,6 +4,7 @@ dist-ssr/
 release/
 release-app/
 android/app/build/
+android/app/src/main/assets/
 android/build/
 android/.gradle/
 android/local.properties
@@ -11,12 +12,20 @@ android/local.properties
 .electron-builder-cache-local/
 .electron-builder-cache-nsis-clean/
 .tmp-build/
+electron-runtime-local/
 installer-*/
 installer/
 media-backup-*/
+Locations/
+Walk Through Video/
+vinayak mobile/
 *.log
 *.err.log
 .env
 .env.local
 .DS_Store
 Thumbs.db
+
+# large media (over GitHub's 100MB limit)
+public/assets/*.mp4
+*.mp4

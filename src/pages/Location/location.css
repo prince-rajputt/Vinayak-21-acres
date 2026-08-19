@@ -1,0 +1,474 @@
+/* Location page styles. */
+
+.home-button {
+  position: absolute;
+  top: 30px;
+  left: 33px;
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 70px;
+  border: 3px solid #257934;
+  background: #238d37;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.16);
+}
+
+.location-logo {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: clamp(260px, 24vw, 390px);
+  height: clamp(112px, 19vh, 198px);
+  object-fit: contain;
+  transform: translateX(-50%);
+}
+
+.location-content {
+  display: grid;
+  grid-template-columns: minmax(420px, 737px) minmax(360px, 1fr) 274px;
+  gap: 48px;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0 8px;
+}
+
+.location-map-card {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  box-shadow: 0 8px 18px rgba(71, 54, 26, 0.16);
+}
+
+.location-map-frame {
+  display: grid;
+  place-items: center;
+  width: 96%;
+  height: 88%;
+  border: 1px solid #8f8f8f;
+  background: #ffffff;
+}
+
+.location-map-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.location-video-card {
+  position: relative;
+  display: grid;
+  align-self: stretch;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 12px;
+  background: #e0dcd4;
+  box-shadow: 0 8px 18px rgba(71, 54, 26, 0.16);
+}
+
+.location-video-inline {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.location-volume-bar {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  z-index: 2;
+}
+
+.location-volume-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: background 180ms ease;
+}
+
+.location-volume-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.location-volume-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.location-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  outline: none;
+  cursor: pointer;
+}
+
+.location-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+
+.location-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.location-volume-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+
+.google-map-link {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 12px;
+  color: #9a7d3a;
+  background: #e0dcd4;
+  text-align: center;
+  cursor: pointer;
+  font-family: Georgia, "Times New Roman", serif;
+  box-shadow: 8px 8px 16px rgba(163, 157, 147, 0.5), -8px -8px 16px rgba(255, 255, 255, 0.7);
+}
+
+.google-map-logo {
+  width: 92px;
+  height: 92px;
+  margin-bottom: 24px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(242, 201, 93, 0.16));
+}
+
+.google-title,
+.google-note {
+  display: block;
+}
+
+.google-title {
+  font-size: 27px;
+  font-weight: 700;
+}
+
+.google-note {
+  max-width: 185px;
+  margin-top: 13px;
+  font-size: 20px;
+  line-height: 1.22;
+}
+
+@media (max-width: 1100px) {
+
+  .location-logo,
+.home-button {
+    position: static;
+  }
+
+  .location-logo {
+    transform: none;
+    width: min(90vw, 430px);
+    height: auto;
+  }
+
+  .location-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: auto;
+    width: min(100%, 720px);
+    gap: 18px;
+  }
+
+  .location-map-card,
+.location-video-card {
+    width: 100%;
+  }
+
+  .location-map-card {
+    height: auto;
+    aspect-ratio: 1.18;
+  }
+
+  .location-video-card {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .google-map-link {
+    min-height: 230px;
+  }
+}
+
+@media (min-width: 1101px) and (max-width: 2199px) {
+
+  .home-button {
+    top: 20px;
+    left: 22px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .home-button svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .location-content {
+    gap: 28px;
+    height: clamp(260px, 38vh, 320px);
+    margin-top: 10px;
+  }
+
+  .google-map-link {
+    padding: 0 18px;
+  }
+
+  .google-map-logo {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 14px;
+  }
+
+  .google-title {
+    font-size: 23px;
+  }
+
+  .google-note {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 2200px) and (min-height: 1200px) {
+
+  .home-button {
+    top: 54px;
+    left: 58px;
+    width: 112px;
+    height: 112px;
+    border-width: 5px;
+  }
+
+  .home-button svg {
+    width: 72px;
+    height: 72px;
+  }
+
+  .location-logo {
+    width: 620px;
+    height: 310px;
+  }
+
+  .location-content {
+    grid-template-columns: minmax(900px, 1360px) minmax(720px, 1fr) 440px;
+    max-width: 3300px;
+    height: min(42vh, 820px);
+    gap: 82px;
+    margin-top: 34px;
+  }
+
+  .google-map-logo {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 38px;
+  }
+
+  .google-title {
+    font-size: 44px;
+  }
+
+  .google-note {
+    max-width: 310px;
+    margin-top: 22px;
+    font-size: 32px;
+  }
+}
+
+@media (min-width: 3400px) and (min-height: 1800px) {
+
+  .home-button {
+    top: 72px;
+    left: 76px;
+    width: 138px;
+    height: 138px;
+  }
+
+  .home-button svg {
+    width: 88px;
+    height: 88px;
+  }
+
+  .location-logo {
+    width: 820px;
+    height: 390px;
+  }
+
+  .location-content {
+    grid-template-columns: minmax(1120px, 1540px) minmax(900px, 1fr) 560px;
+    max-width: 3500px;
+    height: min(42vh, 900px);
+    gap: 104px;
+    margin-top: 42px;
+  }
+
+  .google-map-logo {
+    width: 188px;
+    height: 188px;
+  }
+
+  .google-title {
+    font-size: 56px;
+  }
+
+  .google-note {
+    max-width: 390px;
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 620px) {
+
+  .location-content {
+    padding: 0;
+  }
+
+  .location-map-frame {
+    width: 96%;
+    height: 72%;
+  }
+}
+
+.location-content {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.86fr) minmax(420px, 1fr) 220px;
+  gap: 40px;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.location-map-card {
+  border-radius: 16px;
+  background: #e0dcd4;
+  box-shadow: 8px 8px 16px rgba(163, 157, 147, 0.5), -8px -8px 16px rgba(255, 255, 255, 0.7);
+}
+
+.location-map-frame {
+  width: 98%;
+  height: 84%;
+  border-color: rgba(163, 157, 147, 0.25);
+}
+
+.location-video-card,
+.google-map-link {
+  border-radius: 16px;
+  background: #e0dcd4;
+  box-shadow: 8px 8px 16px rgba(163, 157, 147, 0.5), -8px -8px 16px rgba(255, 255, 255, 0.7);
+}
+
+.location-video-card {
+  position: relative;
+  border-left: none;
+}
+
+.google-map-link {
+  padding: 0 20px;
+  color: #9a7d3a;
+}
+
+.google-map-logo {
+  width: 76px;
+  height: 76px;
+  margin-bottom: 20px;
+}
+
+.google-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 22px;
+}
+
+.google-note {
+  max-width: 164px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+
+.popup-google-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #ffffff;
+}
+
+@media (max-width: 1200px) {
+
+  .location-content {
+    grid-template-columns: 1fr;
+    width: min(100%, 760px);
+    height: auto;
+    gap: 18px;
+  }
+
+  .location-map-card {
+    aspect-ratio: 1.28;
+  }
+
+  .location-video-card {
+    aspect-ratio: 16 / 9;
+  }
+
+  .google-map-link {
+    min-height: 218px;
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "vinayak-21-acres",
+  "version": "1.0.0",
+  "description": "Vinayak 21 Acres secure desktop application",
+  "main": "electron/main.cjs",
+  "author": "Vinayak 21 Acres",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run build:secure",
+    "build:renderer": "vite build --mode production",
+    "build:secure": "npm run build:renderer && node scripts/obfuscate-dist.cjs && node scripts/encrypt-assets.cjs && node scripts/generate-integrity-manifest.cjs",
+    "preview": "vite preview",
+    "mobile:build": "npm run build:renderer && npx cap sync android",
+    "mobile:open": "npx cap open android",
+    "mobile:apk": "npm run mobile:build && cd android && gradlew.bat assembleDebug --no-daemon --console=plain --max-workers=2",
+    "electron": "npm run build:secure && electron .",
+    "dist:win": "npm run build:secure && electron-builder --win nsis -c electron-builder.yml",
+    "security:integrity": "node scripts/generate-integrity-manifest.cjs",
+    "security:encrypt-assets": "node scripts/encrypt-assets.cjs",
+    "security:obfuscate": "node scripts/obfuscate-dist.cjs"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.4.2",
+    "@capacitor/cli": "^8.4.2",
+    "@capacitor/core": "^8.4.2",
+    "@vitejs/plugin-react": "^6.0.3",
+    "electron": "^43.1.0",
+    "electron-builder": "^26.15.3",
+    "javascript-obfuscator": "^5.5.0",
+    "lucide-react": "^1.25.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "terser": "^5.49.0",
+    "vite": "^8.1.5"
+  },
+  "dependencies": {
+    "pdfjs-dist": "^3.11.174"
+  }
+}

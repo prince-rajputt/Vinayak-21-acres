@@ -1,0 +1,167 @@
+/* Exit Password Modal & Touchscreen Keypad Styles */
+
+.exit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  animation: exitFadeIn 220ms ease-out;
+}
+
+@keyframes exitFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.exit-modal-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 380px;
+  padding: 32px 36px 36px;
+  background: #e0dcd4;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 14px 16px 36px rgba(0, 0, 0, 0.6), -10px -10px 24px rgba(255, 255, 255, 0.4);
+}
+
+.exit-modal-card.is-shaking {
+  animation: exitShake 500ms ease-in-out;
+}
+
+@keyframes exitShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-12px); }
+  40%, 80% { transform: translateX(12px); }
+}
+
+.exit-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+}
+
+.exit-modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.exit-modal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: #e0dcd4;
+  color: #7a5c1e;
+  box-shadow: 4px 4px 8px rgba(163, 157, 147, 0.4), -4px -4px 8px rgba(255, 255, 255, 0.7);
+}
+
+.exit-modal-header h2 {
+  margin: 4px 0 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: 0.5px;
+}
+
+.exit-modal-header p {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  color: #666666;
+}
+
+/* PIN Dots Display */
+.exit-pin-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  height: 28px;
+}
+
+.exit-pin-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #e0dcd4;
+  border: 2px solid rgba(191, 160, 84, 0.5);
+  box-shadow: inset 2px 2px 4px rgba(163, 157, 147, 0.4), inset -2px -2px 4px rgba(255, 255, 255, 0.6);
+  transition: all 180ms ease;
+}
+
+.exit-pin-dot.is-filled {
+  background: #bfa054;
+  border-color: #bfa054;
+  box-shadow: 0 0 10px rgba(191, 160, 84, 0.6);
+  transform: scale(1.15);
+}
+
+.exit-error-msg {
+  margin: 0 0 14px;
+  color: #d93838;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Touchscreen Keypad Grid */
+.exit-keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 76px);
+  gap: 14px;
+  justify-content: center;
+}
+
+.exit-keypad-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 72px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: #e0dcd4;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  box-shadow: 4px 4px 9px rgba(163, 157, 147, 0.45), -4px -4px 9px rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  user-select: none;
+  transition: all 160ms ease;
+}
+
+.exit-keypad-btn:hover {
+  transform: translateY(-2px);
+  color: #7a5c1e;
+  box-shadow: 6px 6px 12px rgba(163, 157, 147, 0.5), -6px -6px 12px rgba(255, 255, 255, 0.8);
+}
+
+.exit-keypad-btn:active {
+  transform: scale(0.93);
+  box-shadow: inset 3px 3px 6px rgba(163, 157, 147, 0.5), inset -3px -3px 6px rgba(255, 255, 255, 0.6);
+}
+
+.exit-keypad-btn.is-action {
+  font-size: 20px;
+  color: #7a5c1e;
+  background: #dad5cd;
+}
