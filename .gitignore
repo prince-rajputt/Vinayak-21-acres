@@ -21,9 +21,9 @@ installer/
 installer-*/
 
 # Raw source-material dumps (duplicates of public/assets, not used by the app)
-Locations/
-Plans/
-Walk Through Video/
+/Locations/
+/Plans/
+/Walk Through Video/
 
 # Oversized gallery videos (exceed GitHub's 100MB per-file limit) — host externally
 public/assets/Gallery/Videos/*.mp4
