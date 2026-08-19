@@ -1,0 +1,9 @@
+{
+  "appId": "com.vinayak21acers.app",
+  "appName": "Vinayak 21 Acers",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false
+  }
+}

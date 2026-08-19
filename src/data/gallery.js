@@ -1,0 +1,95 @@
+export const galleryCategories = [
+  {
+    id: "unit-interior-views",
+    label: "Unit Interior Views",
+    mediaType: "image",
+    items: [
+      {
+        src: "/assets/Gallery/Unit Interior Views/Lift Lobby copy.jpg",
+        name: "Lift Lobby",
+      },
+      {
+        src: "/assets/Gallery/Unit Interior Views/Living Room copy.jpg",
+        name: "Living Room",
+      },
+    ],
+  },
+  {
+    id: "podium-club",
+    label: "Podium & Club",
+    mediaType: "image",
+    items: [
+      { src: "/assets/Gallery/Podium & Club/ACTIVITY ROOM.jpg", name: "Activity Room" },
+      { src: "/assets/Gallery/Podium & Club/BANQUET.jpg", name: "Banquet" },
+      { src: "/assets/Gallery/Podium & Club/CHANGING ROOM.jpg", name: "Changing Room" },
+      { src: "/assets/Gallery/Podium & Club/CO WORKING SPACE.jpg", name: "Co Working Space" },
+      { src: "/assets/Gallery/Podium & Club/GUEST ROOM.jpg", name: "Guest Room" },
+      { src: "/assets/Gallery/Podium & Club/GYMNASIUM.jpg", name: "Gymnasium" },
+      { src: "/assets/Gallery/Podium & Club/INDOOR GAMES.jpg", name: "Indoor Games" },
+      { src: "/assets/Gallery/Podium & Club/KIDS PLAY ROOM.jpg", name: "Kids Play Room" },
+      { src: "/assets/Gallery/Podium & Club/LOUNGE.jpg", name: "Lounge" },
+      { src: "/assets/Gallery/Podium & Club/POOL-2.jpg", name: "Pool View" },
+      { src: "/assets/Gallery/Podium & Club/POOL.jpg", name: "Pool" },
+      { src: "/assets/Gallery/Podium & Club/STAR GAZING.jpg", name: "Star Gazing" },
+      { src: "/assets/Gallery/Podium & Club/YOGA STUDIO.jpg", name: "Yoga Studio" },
+    ],
+  },
+  {
+    id: "maidaan-and-more",
+    label: "Maidaan and More",
+    mediaType: "image",
+    items: [
+      { src: "/assets/Gallery/Maidaan and More/CRICKET_PLAY ARENA.jpg", name: "Cricket Play Arena" },
+      { src: "/assets/Gallery/Maidaan and More/ENTRANCE_THEME_GARDEN.jpg", name: "Entrance Theme Garden" },
+      { src: "/assets/Gallery/Maidaan and More/LAWN TENNIS.jpg", name: "Lawn Tennis" },
+      { src: "/assets/Gallery/Maidaan and More/OPEN AIR FUTSAL GROUND.jpg", name: "Open Air Futsal Ground" },
+      { src: "/assets/Gallery/Maidaan and More/PET PARK.jpg", name: "Pet Park" },
+    ],
+  },
+  {
+    id: "elevation-and-gate",
+    label: "Elevation and Gate",
+    mediaType: "image",
+    items: [
+      { src: "/assets/Gallery/Elevation and Gate/AERIAL_VIEW.jpg", name: "Aerial View" },
+      { src: "/assets/Gallery/Elevation and Gate/ELEVATION_VIEW.jpg", name: "Elevation View" },
+      { src: "/assets/Gallery/Elevation and Gate/ELEVATION_VIEW_2.jpg", name: "Elevation View 2" },
+      { src: "/assets/Gallery/Elevation and Gate/ENTRANCE_DRIVE.jpg", name: "Entrance Drive" },
+      { src: "/assets/Gallery/Elevation and Gate/MAIN_ENTRANCE_VIEW.jpg", name: "Main Entrance View" },
+    ],
+  },
+  {
+    id: "central-park",
+    label: "Central Park",
+    mediaType: "image",
+    items: [
+      { src: "/assets/Gallery/Central Park/AMPHITHEATER.jpg", name: "Amphitheater" },
+      { src: "/assets/Gallery/Central Park/BARBEQUE NOOK.jpg", name: "Barbeque Nook" },
+      { src: "/assets/Gallery/Central Park/CENTRAL_LAWN.jpg", name: "Central Lawn" },
+      { src: "/assets/Gallery/Central Park/KIDSPLAY_AREA.jpg", name: "Kids Play Area" },
+      { src: "/assets/Gallery/Central Park/MOUND AND ACTIVITY_DECK.jpg", name: "Mound and Activity Deck" },
+      { src: "/assets/Gallery/Central Park/OUTDOOR_GYM & SITOUT.jpg", name: "Outdoor Gym and Sitout" },
+      { src: "/assets/Gallery/Central Park/PAVILLION WITH COURTS.jpg", name: "Pavilion with Courts" },
+      { src: "/assets/Gallery/Central Park/PICKLE_BALL_COURT.jpg", name: "Pickle Ball Court" },
+      { src: "/assets/Gallery/Central Park/SKATING_ZONE.jpg", name: "Skating Zone" },
+      { src: "/assets/Gallery/Central Park/TEENAGE PLAY_AREA.jpg", name: "Teenage Play Area" },
+      { src: "/assets/Gallery/Central Park/WATERBODY_EXPERIENCE_VIEW.jpg", name: "Waterbody Experience View" },
+      { src: "/assets/Gallery/Central Park/WATER_FEATURE.jpg", name: "Water Feature" },
+    ],
+  },
+  {
+    id: "videos",
+    label: "Videos",
+    mediaType: "video",
+    items: [
+      {
+        src: "/assets/walkthrough-video.mp4",
+        name: "Vinayak 21 Acres Walkthrough",
+      },
+      {
+        src: "/assets/location-video.mp4",
+        name: "Location Motion View",
+      },
+    ],
+  },
+];

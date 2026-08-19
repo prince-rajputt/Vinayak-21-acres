@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Vinayak 21 Acers</string>
+    <string name="title_activity_main">Vinayak 21 Acers</string>
+    <string name="package_name">com.vinayak21acers.app</string>
+    <string name="custom_url_scheme">com.vinayak21acers.app</string>
+</resources>

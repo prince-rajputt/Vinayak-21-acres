@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-electron/
+release/
+release-app/
+android/app/build/
+android/build/
+android/.gradle/
+android/capacitor-cordova-android-plugins/build/
+.tmp-build/
+.electron-builder-cache/
+.electron-builder-cache-local/
+.electron-builder-cache-nsis-clean/
+electron-runtime-local/
+
+# Packaged installers / experiment folders (not source)
+installer/
+installer-*/
+
+# Raw source-material dumps (duplicates of public/assets, not used by the app)
+Locations/
+Plans/
+Walk Through Video/
+
+# Oversized gallery videos (exceed GitHub's 100MB per-file limit) — host externally
+public/assets/Gallery/Videos/*.mp4
+
+# Backups and scratch
+media-backup-before-compress-*/
+*-backup/
+*-backup-*/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local

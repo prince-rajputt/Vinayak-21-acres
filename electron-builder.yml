@@ -1,0 +1,47 @@
+appId: com.vinayak21acres.desktop
+productName: Vinayak 21 Acres
+artifactName: "${productName} Setup ${version}.${ext}"
+asar: true
+compression: maximum
+removePackageScripts: true
+npmRebuild: false
+directories:
+  output: release-app
+files:
+  - from: electron
+    to: electron
+    filter:
+      - "**/*"
+  - from: logo
+    to: logo
+    filter:
+      - "**/*"
+  - package.json
+  - "!**/*.map"
+  - "!src/**"
+  - "!public/**"
+  - "!Plans/**"
+  - "!Locations/**"
+  - "!Walk Through Video/**"
+  - "!scripts/**"
+  - "!release/**"
+  - "!installer*/**"
+extraResources:
+  - from: dist
+    to: dist
+    filter:
+      - "**/*"
+      - "!**/*.map"
+      - "!assets/Gallery/Videos/**"
+win:
+  icon: logo/icon.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Vinayak 21 Acres

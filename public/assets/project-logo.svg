@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 180" width="100%" height="100%">
+  <defs>
+    <!-- Sharp crisp drop shadow for logo text -->
+    <filter id="logo-glow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <g filter="url(#logo-glow)">
+    <!-- Top Row: VINAYAK -->
+    <text 
+      x="270" 
+      y="62" 
+      font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" 
+      font-size="52" 
+      font-weight="900" 
+      fill="#a81c1c" 
+      letter-spacing="14" 
+      text-anchor="middle"
+    >
+      VINAYAK
+    </text>
+
+    <!-- Bottom Row Group: 21 + Chevron A + CRES -->
+    <g transform="translate(270, 142)">
+      <!-- Number "21" in Red -->
+      <text 
+        x="-148" 
+        y="0" 
+        font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" 
+        font-size="62" 
+        font-weight="900" 
+        fill="#a81c1c" 
+        letter-spacing="-1"
+      >
+        21
+      </text>
+
+      <!-- Iconic Red Chevron Symbol (The 'A' in ACRES) -->
+      <g transform="translate(-52, -54)">
+        <!-- Outer Roof Chevron -->
+        <path d="M 22 0 L 44 48 L 34 48 L 22 20 L 10 48 L 0 48 Z" fill="#a81c1c" />
+        <!-- Inner Accent Peak -->
+        <polygon points="22,14 31,36 13,36" fill="#a81c1c" />
+      </g>
+
+      <!-- Text "CRES" in Black -->
+      <text 
+        x="0" 
+        y="0" 
+        font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" 
+        font-size="62" 
+        font-weight="900" 
+        fill="#111111" 
+        letter-spacing="5"
+      >
+        CRES
+      </text>
+    </g>
+  </g>
+</svg>
