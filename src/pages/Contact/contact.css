@@ -49,18 +49,38 @@
 
 .contact-grid {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr 1.1fr;
+  grid-template-columns: 0.8fr 1fr 1fr 0.7fr;
   gap: clamp(14px, 1.8vw, 24px);
   min-height: 0;
 }
 
 .contact-call-card,
 .contact-info-card,
+.contact-qr-card,
 .contact-rera-panel {
   border: none;
   border-radius: 8px;
   background: #e0dcd4;
   box-shadow: 8px 8px 16px rgba(163, 157, 147, 0.5), -8px -8px 16px rgba(255, 255, 255, 0.7);
+}
+
+.contact-qr-card {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  min-height: 220px;
+  padding: 22px;
+}
+
+.contact-qr-card img {
+  width: clamp(90px, 8vw, 128px);
+  height: clamp(90px, 8vw, 128px);
+  object-fit: contain;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 6px;
+  box-shadow: 3px 3px 6px rgba(163, 157, 147, 0.4), -3px -3px 6px rgba(255, 255, 255, 0.6);
 }
 
 .contact-call-card {

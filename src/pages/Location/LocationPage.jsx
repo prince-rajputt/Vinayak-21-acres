@@ -2,7 +2,29 @@ import React from "react";
 import { InteriorLayout } from "../../components/InteriorLayout";
 import "./location.css";
 
-const GOOGLE_MAP_PROXY_URL = "/google-map-proxy/index.html";
+const GOOGLE_MAP_EMBED_URL =
+  "https://www.google.com/maps/embed?pb=!1m2!2m1!1sVinayak+21+Acres,+Bhojerhat+Rd,+Bantala,+Hatisala,+West+Bengal+700135";
+
+function useOnlineStatus() {
+  const [isOnline, setIsOnline] = React.useState(navigator.onLine);
+
+  React.useEffect(() => {
+    function goOnline() {
+      setIsOnline(true);
+    }
+    function goOffline() {
+      setIsOnline(false);
+    }
+    window.addEventListener("online", goOnline);
+    window.addEventListener("offline", goOffline);
+    return () => {
+      window.removeEventListener("online", goOnline);
+      window.removeEventListener("offline", goOffline);
+    };
+  }, []);
+
+  return isOnline;
+}
 
 export function LocationPage() {
   const [openPopup, setOpenPopup] = React.useState(null);
@@ -224,6 +246,8 @@ function LocationPopup({ type, onClose }) {
     return `${mins}:${secs}`;
   }
 
+  const isOnline = useOnlineStatus();
+
   return (
     <div className="location-popup" role="dialog" aria-modal="true">
       <button className="popup-close" type="button" onClick={onClose} aria-label="Close fullscreen view">
@@ -319,13 +343,20 @@ function LocationPopup({ type, onClose }) {
         ) : isMapImage ? (
           <img className="popup-image" src="/assets/location-map.jpg" alt="Vinayak location map" decoding="async" />
         ) : isGoogleMap ? (
-          <iframe
-            className="popup-google-map"
-            src={GOOGLE_MAP_PROXY_URL}
-            title="Interactive Google map"
-            loading="eager"
-            allow="fullscreen; geolocation"
-          />
+          isOnline ? (
+            <iframe
+              className="popup-google-map"
+              src={GOOGLE_MAP_EMBED_URL}
+              title="Interactive Google map"
+              loading="eager"
+              allow="fullscreen; geolocation"
+            />
+          ) : (
+            <div className="popup-offline-map">
+              <img src="/assets/location-map.jpg" alt="Vinayak location map" decoding="async" />
+              <span className="popup-offline-badge">No internet connection — showing saved map</span>
+            </div>
+          )
         ) : (
           <img className="popup-image" src="/assets/location-map.jpg" alt="Vinayak location map" decoding="async" />
         )}

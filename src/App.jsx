@@ -13,6 +13,7 @@ import { pageTitles } from "./data/site";
 import { useCurrentPage } from "./hooks/useCurrentPage";
 import { ExitPasswordProvider } from "./components/ExitPasswordContext";
 import { GestureControls } from "./components/GestureControls";
+import { ScreensaverProvider } from "./components/Screensaver";
 
 export function App() {
   const currentPage = useCurrentPage();
@@ -39,7 +40,9 @@ export function App() {
 
   return (
     <ExitPasswordProvider>
-      <GestureControls>{renderContent()}</GestureControls>
+      <ScreensaverProvider>
+        <GestureControls>{renderContent()}</GestureControls>
+      </ScreensaverProvider>
     </ExitPasswordProvider>
   );
 }

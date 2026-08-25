@@ -51,6 +51,11 @@ export function ContactPage() {
               Kolkata
             </p>
           </div>
+
+          <div className="contact-qr-card">
+            <img src="/assets/Review QR Code.png" alt="Scan to leave a review" decoding="async" />
+            <span className="contact-card-label">Scan to Review</span>
+          </div>
         </div>
 
         <div className="contact-rera-panel" aria-label="RERA registration details">

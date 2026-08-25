@@ -108,10 +108,25 @@ const specificationCards = [
   },
 ];
 
+const specShowcaseImages = [
+  { src: "/assets/Specs Page Images/Living Room.jpg", label: "Living Room" },
+  { src: "/assets/Specs Page Images/Sky Terrace View.jpg", label: "Sky Terrace View" },
+  { src: "/assets/Specs Page Images/Lift Lobby.jpg", label: "Lift Lobby" },
+];
+
 export function SpecificationsPage() {
   return (
     <InteriorLayout activePage="specs">
       <section className="spec-page" aria-label="Project specifications">
+        <div className="spec-showcase">
+          {specShowcaseImages.map((image) => (
+            <div className="spec-showcase-card" key={image.label}>
+              <img src={image.src} alt={image.label} decoding="async" />
+              <span className="spec-showcase-label">{image.label}</span>
+            </div>
+          ))}
+        </div>
+
         <div className="spec-container">
           {specificationCards.map((spec) => {
             const Icon = spec.icon;

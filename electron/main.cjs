@@ -6,6 +6,7 @@ const {
   dialog,
   ipcMain,
   net,
+  powerSaveBlocker,
   protocol,
   session,
 } = require("electron");
@@ -315,6 +316,9 @@ app.whenReady().then(async () => {
       app.quit();
     } else {
       await createMainWindow();
+      // Kiosk display: never let Windows dim/sleep the screen or suspend
+      // the app while it's sitting idle showing the screensaver.
+      powerSaveBlocker.start("prevent-display-sleep");
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : "Security startup check failed.";
