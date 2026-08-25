@@ -36,11 +36,16 @@ export function TowerPlanViewer({ towerId, overviewSrc, unitImages, onClose }) {
 
   React.useEffect(() => {
     function onKey(e) {
-      if (e.key === "Escape") onClose();
+      if (e.key !== "Escape") return;
+      if (activeKey !== "overview") {
+        setActiveKey("overview");
+        return;
+      }
+      onClose();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [onClose, activeKey]);
 
   const recomputeRect = React.useCallback(() => {
     const container = containerRef.current;
@@ -132,8 +137,14 @@ export function TowerPlanViewer({ towerId, overviewSrc, unitImages, onClose }) {
     delete drawingsRef.current[activeKey];
   }
 
+  // Back/Cross step back one level at a time: unit plan -> tower overview -> close
+  // (back to the master plan's tower indicators), mirroring how you drill in.
   function closeAndStop(e) {
     e.stopPropagation();
+    if (activeKey !== "overview") {
+      setActiveKey("overview");
+      return;
+    }
     onClose();
   }
 

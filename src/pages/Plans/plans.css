@@ -809,6 +809,14 @@
   color: #2b2620;
 }
 
+/* Renders above the master-plan popup's own close button (z-index: 130 in
+   styles.css), which shares screen position with this popup's close button
+   since both use .popup-close. Without this, clicking "X" here actually hits
+   the master popup's close button underneath and closes the whole view. */
+.tower-plan-popup {
+  z-index: 140;
+}
+
 .tower-back-btn {
   position: absolute;
   top: 74px;
