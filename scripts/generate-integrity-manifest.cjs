@@ -8,6 +8,16 @@ const distRoot = path.join(__dirname, "..", "dist");
 const manifestFileName = "integrity-manifest.json";
 const manifestPath = path.join(distRoot, manifestFileName);
 
+// Must mirror the extraResources exclusions in electron-builder.yml — files
+// excluded from the packaged app must not be listed here, or the runtime
+// integrity check will fail trying to verify a file that was never shipped.
+const PACKAGE_EXCLUDED_PREFIXES = ["assets/Gallery/Videos/"];
+
+function isExcludedFromPackage(relativePath) {
+  const normalized = relativePath.replace(/\\/g, "/");
+  return PACKAGE_EXCLUDED_PREFIXES.some((prefix) => normalized.startsWith(prefix));
+}
+
 async function walk(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
   const files = [];
@@ -16,7 +26,12 @@ async function walk(dir) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       files.push(...await walk(fullPath));
-    } else if (entry.isFile() && entry.name !== manifestFileName && !entry.name.endsWith(".map")) {
+    } else if (
+      entry.isFile() &&
+      entry.name !== manifestFileName &&
+      !entry.name.endsWith(".map") &&
+      !isExcludedFromPackage(path.relative(distRoot, fullPath))
+    ) {
       files.push(fullPath);
     }
   }

@@ -1,29 +1,27 @@
 export const menuCards = [
   {
     title: "OVERVIEW",
-    image: "/assets/overview/AERIAL_VIEW.jpg",
+    image: "/assets/Home Page Images/Overview.jpg",
     page: "overview",
   },
   {
     title: "LOCATION",
-    image:
-      "/assets/Animites/Elevation and Gate/ENTRANCE_DRIVEWAY_VIEW_005_TWILIGHT_2026.04 copy.20_HIRES.jpg",
+    image: "/assets/Home Page Images/Location.jpg",
     page: "location",
   },
   {
     title: "AMENITIES",
-    image:
-      "/assets/Animites/Central Park/CENTRAL_LAWN_VIEW_002_DAY_2026.04 copy.20_HIRES.jpg",
+    image: "/assets/Home Page Images/Amenities.jpg",
     page: "amenities",
   },
   {
     title: "PLANS",
-    image: "/assets/location-map-display.jpg",
+    image: "/assets/Home Page Images/Plans.jpg",
     page: "plans",
   },
   {
     title: "SPECIFICATIONS",
-    image: "/assets/Animites/Podium & Club/LOUNGE_2026.04 copy.20_HIRES_FINAL.jpg",
+    image: "/assets/Home Page Images/Specs.jpg",
     page: "specs",
   },
 ];

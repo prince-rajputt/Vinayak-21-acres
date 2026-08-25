@@ -1,555 +1,225 @@
 import React from "react";
-import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
+import { Hand } from "lucide-react";
 import { InteriorLayout } from "../../components/InteriorLayout";
+import { TowerPlanViewer } from "./TowerPlanViewer";
 import "./plans.css";
 
-const UNIT_TYPES = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const MASTER_PLAN_SRC = "/assets/Master Plan.jpg";
 
-const towerPlans = ["1B", "2A", "2B", "2C"].map((tower) => ({
-  id: tower,
-  name: `Tower ${tower}`,
-  planSrc: `/assets/plan/Tower%20Plans/Tower-${tower}.jpg`,
-  units: UNIT_TYPES.map((type) => ({
-    type,
-    name: `Tower ${tower} - Type ${type}`,
-    src: `/assets/plan/Unit%20Plans/Tower-${tower}/${type}.jpg`,
-  })),
-}));
+// Positions as % of the image's natural width/height, placed just above each tower's label text.
+const TOWER_HOTSPOTS = [
+  { id: "T-1A", xPct: 48.28, yPct: 80.95 },
+  { id: "T-1B", xPct: 59.16, yPct: 80.95 },
+  { id: "T-2A", xPct: 65.11, yPct: 80.81 },
+  { id: "T-2B", xPct: 75.29, yPct: 80.67 },
+  { id: "T-2C", xPct: 73.27, yPct: 69.12 },
+];
+
+// Other amenity hotspots on the master plan.
+const AMENITY_HOTSPOTS = [{ id: "Central Park", xPct: 61.24, yPct: 60.5 }];
+
+const ALL_HOTSPOTS = [...TOWER_HOTSPOTS, ...AMENITY_HOTSPOTS];
+
+// Plan images provided so far — hotspots not listed here have no image yet and stay disabled.
+const TOWER_PLAN_DATA = {
+  "Central Park": {
+    overview: "/assets/plan/Central Park/Central Park Plan.jpg",
+    units: {},
+  },
+  "T-1A": {
+    overview: "/assets/plan/Tower-1A/Tower-1A.jpg",
+    units: {
+      A: "/assets/plan/Tower-1A/1A-A.jpg",
+      B: "/assets/plan/Tower-1A/1A-B.jpg",
+      C: "/assets/plan/Tower-1A/1A-C.jpg",
+      D: "/assets/plan/Tower-1A/1A-D.jpg",
+      E: "/assets/plan/Tower-1A/1A-E.jpg",
+      F: "/assets/plan/Tower-1A/1A-F.jpg",
+      G: "/assets/plan/Tower-1A/1A-G.jpg",
+      H: "/assets/plan/Tower-1A/1A-H.jpg",
+    },
+  },
+  "T-1B": {
+    overview: "/assets/plan/Tower Plans/Tower-1B.jpg",
+    units: {
+      A: "/assets/plan/Unit Plans/Tower-1B/A.jpg",
+      B: "/assets/plan/Unit Plans/Tower-1B/B.jpg",
+      C: "/assets/plan/Unit Plans/Tower-1B/C.jpg",
+      D: "/assets/plan/Unit Plans/Tower-1B/D.jpg",
+      E: "/assets/plan/Unit Plans/Tower-1B/E.jpg",
+      F: "/assets/plan/Unit Plans/Tower-1B/F.jpg",
+      G: "/assets/plan/Unit Plans/Tower-1B/G.jpg",
+      H: "/assets/plan/Unit Plans/Tower-1B/H.jpg",
+    },
+  },
+  "T-2A": {
+    overview: "/assets/plan/Tower Plans/Tower-2A.jpg",
+    units: {
+      A: "/assets/plan/Unit Plans/Tower-2A/A.jpg",
+      B: "/assets/plan/Unit Plans/Tower-2A/B.jpg",
+      C: "/assets/plan/Unit Plans/Tower-2A/C.jpg",
+      D: "/assets/plan/Unit Plans/Tower-2A/D.jpg",
+      E: "/assets/plan/Unit Plans/Tower-2A/E.jpg",
+      F: "/assets/plan/Unit Plans/Tower-2A/F.jpg",
+      G: "/assets/plan/Unit Plans/Tower-2A/G.jpg",
+      H: "/assets/plan/Unit Plans/Tower-2A/H.jpg",
+    },
+  },
+  "T-2B": {
+    overview: "/assets/plan/Tower Plans/Tower-2B.jpg",
+    units: {
+      A: "/assets/plan/Unit Plans/Tower-2B/A.jpg",
+      B: "/assets/plan/Unit Plans/Tower-2B/B.jpg",
+      C: "/assets/plan/Unit Plans/Tower-2B/C.jpg",
+      D: "/assets/plan/Unit Plans/Tower-2B/D.jpg",
+      E: "/assets/plan/Unit Plans/Tower-2B/E.jpg",
+      F: "/assets/plan/Unit Plans/Tower-2B/F.jpg",
+      G: "/assets/plan/Unit Plans/Tower-2B/G.jpg",
+      H: "/assets/plan/Unit Plans/Tower-2B/H.jpg",
+    },
+  },
+  "T-2C": {
+    overview: "/assets/plan/Tower Plans/Tower-2C.jpg",
+    units: {
+      A: "/assets/plan/Unit Plans/Tower-2C/A.jpg",
+      B: "/assets/plan/Unit Plans/Tower-2C/B.jpg",
+      C: "/assets/plan/Unit Plans/Tower-2C/C.jpg",
+      D: "/assets/plan/Unit Plans/Tower-2C/D.jpg",
+      E: "/assets/plan/Unit Plans/Tower-2C/E.jpg",
+      F: "/assets/plan/Unit Plans/Tower-2C/F.jpg",
+      G: "/assets/plan/Unit Plans/Tower-2C/G.jpg",
+      H: "/assets/plan/Unit Plans/Tower-2C/H.jpg",
+    },
+  },
+};
+
+function getContainedImageRect(containerWidth, containerHeight, naturalWidth, naturalHeight) {
+  const scale = Math.min(containerWidth / naturalWidth, containerHeight / naturalHeight);
+  const width = naturalWidth * scale;
+  const height = naturalHeight * scale;
+  const left = (containerWidth - width) / 2;
+  const top = (containerHeight - height) / 2;
+  return { left, top, width, height };
+}
 
 export function PlansPage() {
-  const [selectedTowerId, setSelectedTowerId] = React.useState(null);
-  const [activeUnitIndex, setActiveUnitIndex] = React.useState(null);
-  const [currentSlideIndex, setCurrentSlideIndex] = React.useState(0);
-  const [unitSlideIndex, setUnitSlideIndex] = React.useState(0);
+  const [isEnlarged, setIsEnlarged] = React.useState(false);
+  const [imageRect, setImageRect] = React.useState(null);
+  const [activeTowerId, setActiveTowerId] = React.useState(null);
+  const containerRef = React.useRef(null);
+  const imgRef = React.useRef(null);
 
-  const lightboxRailRef = React.useRef(null);
-  const lightboxGestureRef = React.useRef(null);
-  const [lightboxZoom, setLightboxZoom] = React.useState(1);
-  const [lightboxOffset, setLightboxOffset] = React.useState({ x: 0, y: 0 });
-
-  const selectedTower = towerPlans.find((tower) => tower.id === selectedTowerId);
-  const activeUnit =
-    selectedTower && activeUnitIndex !== null ? selectedTower.units[activeUnitIndex] : null;
-
-  const totalTowerSlides = Math.ceil(towerPlans.length / 2);
-  const totalUnitSlides = selectedTower ? Math.ceil(selectedTower.units.length / 4) : 2;
-
-  // Touch & Mouse Drag Swipe Refs
-  const touchStartX = React.useRef(0);
-  const touchStartY = React.useRef(0);
-  const isMouseDown = React.useRef(false);
-  const mouseStartX = React.useRef(0);
-
-  const closeUnitPreview = React.useCallback(() => setActiveUnitIndex(null), []);
-
-  const showPreviousUnit = React.useCallback(() => {
-    if (!selectedTower) return;
-    setActiveUnitIndex((current) =>
-      current === null ? 0 : (current - 1 + selectedTower.units.length) % selectedTower.units.length,
-    );
-  }, [selectedTower]);
-
-  const showNextUnit = React.useCallback(() => {
-    if (!selectedTower) return;
-    setActiveUnitIndex((current) =>
-      current === null ? 0 : (current + 1) % selectedTower.units.length,
-    );
-  }, [selectedTower]);
-
-  // Auto scroll active thumbnail in lightbox rail
-  React.useEffect(() => {
-    if (activeUnitIndex !== null && lightboxRailRef.current) {
-      lightboxRailRef.current.children[activeUnitIndex]?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
-    }
-    setLightboxZoom(1);
-    setLightboxOffset({ x: 0, y: 0 });
-    lightboxGestureRef.current = null;
-  }, [activeUnitIndex]);
-
-  function clampLightboxZoom(value) {
-    return Math.min(3.5, Math.max(1, value));
-  }
-
-  function changeLightboxZoom(nextZoom) {
-    const clamped = clampLightboxZoom(nextZoom);
-    setLightboxZoom(clamped);
-    if (clamped === 1) setLightboxOffset({ x: 0, y: 0 });
-  }
-
-  function handleLightboxWheel(event) {
-    event.preventDefault();
-    changeLightboxZoom(lightboxZoom + (event.deltaY < 0 ? 0.18 : -0.18));
-  }
-
-  function handleLightboxPointerDown(event) {
-    event.stopPropagation();
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-    lightboxGestureRef.current = {
-      mode: lightboxZoom > 1.02 ? "pan" : "swipe",
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
-      lastX: event.clientX,
-      lastY: event.clientY,
-    };
-  }
-
-  function handleLightboxPointerMove(event) {
-    const gesture = lightboxGestureRef.current;
-    if (!gesture || gesture.pointerId !== event.pointerId || gesture.mode !== "pan") return;
-    event.stopPropagation();
-    const dx = event.clientX - gesture.lastX;
-    const dy = event.clientY - gesture.lastY;
-    gesture.lastX = event.clientX;
-    gesture.lastY = event.clientY;
-    setLightboxOffset((current) => ({ x: current.x + dx, y: current.y + dy }));
-  }
-
-  function handleLightboxPointerUp(event) {
-    const gesture = lightboxGestureRef.current;
-    if (!gesture || gesture.pointerId !== event.pointerId) return;
-    event.stopPropagation();
-    lightboxGestureRef.current = null;
-
-    if (gesture.mode !== "swipe") return;
-    const deltaX = event.clientX - gesture.startX;
-    const deltaY = event.clientY - gesture.startY;
-    if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
-      if (deltaX < 0) showNextUnit();
-      else showPreviousUnit();
-    }
-  }
-
-  function handleLightboxTouchStart(event) {
-    if (event.touches.length === 2) {
-      const [first, second] = event.touches;
-      lightboxGestureRef.current = {
-        mode: "pinch",
-        distance: Math.hypot(first.clientX - second.clientX, first.clientY - second.clientY),
-        zoom: lightboxZoom,
-      };
-    }
-  }
-
-  function handleLightboxTouchMove(event) {
-    const gesture = lightboxGestureRef.current;
-    if (!gesture || gesture.mode !== "pinch" || event.touches.length !== 2) return;
-    event.preventDefault();
-    const [first, second] = event.touches;
-    const distance = Math.hypot(first.clientX - second.clientX, first.clientY - second.clientY);
-    changeLightboxZoom(gesture.zoom * (distance / gesture.distance));
-  }
-
-  // Touch Handlers for Hand Swipe Gestures
-  function handleTouchStart(e) {
-    if (e.touches && e.touches.length > 0) {
-      touchStartX.current = e.touches[0].clientX;
-      touchStartY.current = e.touches[0].clientY;
-    }
-  }
-
-  function handleTouchEnd(e) {
-    if (e.changedTouches && e.changedTouches.length > 0) {
-      const touchEndX = e.changedTouches[0].clientX;
-      const touchEndY = e.changedTouches[0].clientY;
-      const deltaX = touchEndX - touchStartX.current;
-      const deltaY = touchEndY - touchStartY.current;
-
-      if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
-        if (deltaX < 0) {
-          if (selectedTowerId) {
-            setUnitSlideIndex((prev) => Math.min(totalUnitSlides - 1, prev + 1));
-          } else {
-            setCurrentSlideIndex((prev) => Math.min(totalTowerSlides - 1, prev + 1));
-          }
-        } else {
-          if (selectedTowerId) {
-            setUnitSlideIndex((prev) => Math.max(0, prev - 1));
-          } else {
-            setCurrentSlideIndex((prev) => Math.max(0, prev - 1));
-          }
-        }
-      }
-    }
-  }
-
-  // Mouse Drag Handlers for Hand Drag Gestures
-  function handleMouseDown(e) {
-    isMouseDown.current = true;
-    mouseStartX.current = e.clientX;
-  }
-
-  function handleMouseUp(e) {
-    if (!isMouseDown.current) return;
-    isMouseDown.current = false;
-    const deltaX = e.clientX - mouseStartX.current;
-    if (Math.abs(deltaX) > 45) {
-      if (deltaX < 0) {
-        if (selectedTowerId) {
-          setUnitSlideIndex((prev) => Math.min(totalUnitSlides - 1, prev + 1));
-        } else {
-          setCurrentSlideIndex((prev) => Math.min(totalTowerSlides - 1, prev + 1));
-        }
-      } else {
-        if (selectedTowerId) {
-          setUnitSlideIndex((prev) => Math.max(0, prev - 1));
-        } else {
-          setCurrentSlideIndex((prev) => Math.max(0, prev - 1));
-        }
-      }
-    }
-  }
-
-  function handleMouseLeave() {
-    isMouseDown.current = false;
-  }
+  const activeTowerData = activeTowerId ? TOWER_PLAN_DATA[activeTowerId] : null;
 
   React.useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        if (activeUnitIndex !== null) {
-          closeUnitPreview();
-        } else if (selectedTowerId) {
-          setSelectedTowerId(null);
-        }
+    if (!isEnlarged) return;
+    function onKey(e) {
+      if (e.key === "Escape") {
+        if (activeTowerId) setActiveTowerId(null);
+        else setIsEnlarged(false);
       }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isEnlarged, activeTowerId]);
 
-      if (activeUnitIndex !== null && event.key === "ArrowLeft") {
-        showPreviousUnit();
-      } else if (selectedTowerId && event.key === "ArrowLeft") {
-        setUnitSlideIndex((prev) => Math.max(0, prev - 1));
-      } else if (!selectedTowerId && event.key === "ArrowLeft") {
-        setCurrentSlideIndex((prev) => Math.max(0, prev - 1));
-      }
+  const recomputeRect = React.useCallback(() => {
+    const container = containerRef.current;
+    const img = imgRef.current;
+    if (!container || !img || !img.naturalWidth) return;
+    setImageRect(
+      getContainedImageRect(container.clientWidth, container.clientHeight, img.naturalWidth, img.naturalHeight)
+    );
+  }, []);
 
-      if (activeUnitIndex !== null && event.key === "ArrowRight") {
-        showNextUnit();
-      } else if (selectedTowerId && event.key === "ArrowRight") {
-        setUnitSlideIndex((prev) => Math.min(totalUnitSlides - 1, prev + 1));
-      } else if (!selectedTowerId && event.key === "ArrowRight") {
-        setCurrentSlideIndex((prev) => Math.min(totalTowerSlides - 1, prev + 1));
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [
-    activeUnitIndex,
-    closeUnitPreview,
-    selectedTowerId,
-    showNextUnit,
-    showPreviousUnit,
-    totalTowerSlides,
-    totalUnitSlides,
-  ]);
-
-  const openTower = (towerId) => {
-    setSelectedTowerId(towerId);
-    setActiveUnitIndex(null);
-    setUnitSlideIndex(0);
-  };
-
-  const showAllTowers = () => {
-    setSelectedTowerId(null);
-    setActiveUnitIndex(null);
-    setUnitSlideIndex(0);
-  };
+  React.useEffect(() => {
+    if (!isEnlarged) return;
+    recomputeRect();
+    window.addEventListener("resize", recomputeRect);
+    return () => window.removeEventListener("resize", recomputeRect);
+  }, [isEnlarged, recomputeRect]);
 
   return (
     <InteriorLayout activePage="plans">
-      <section className={`plans-page${selectedTower ? " is-unit-view" : ""}`}>
-        {selectedTower ? (
-          /* Unit Plans View with Paginated Slider (4 Large Images per Slide) */
-          <div
-            className="unit-plans-stage"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className="unit-stage-header">
-              <button className="plans-back-button" type="button" onClick={showAllTowers}>
-                <ArrowLeft size={16} strokeWidth={2.2} />
-                <span>Back</span>
-              </button>
-
-              <div className="unit-stage-title">
-                <h2>{selectedTower.name}</h2>
-                <span className="unit-stage-badge">Page {unitSlideIndex + 1} of {totalUnitSlides}</span>
-              </div>
-            </div>
-
-            {/* Slider Container with Left/Right Arrows */}
-            <div className="tower-slider-wrapper">
-              <button
-                className="tower-slider-arrow is-left"
-                type="button"
-                onClick={() => setUnitSlideIndex((prev) => Math.max(0, prev - 1))}
-                disabled={unitSlideIndex === 0}
-                aria-label="Previous unit plans page"
-              >
-                <ChevronLeft size={26} strokeWidth={2.2} />
-              </button>
-
-              <div className="tower-slider-viewport">
-                <div
-                  className="tower-slider-track"
-                  style={{ transform: `translateX(-${unitSlideIndex * 100}%)` }}
-                >
-                  {/* Slide 1: Types A - D */}
-                  <div className="unit-slide-grid">
-                    {selectedTower.units.slice(0, 4).map((unit, index) => (
-                      <button
-                        className="unit-plan-card"
-                        type="button"
-                        key={unit.src}
-                        onClick={() => setActiveUnitIndex(index)}
-                        aria-label={`Open ${unit.name}`}
-                      >
-                        <div className="unit-card-header">
-                          <span className="unit-badge">TYPE {unit.type}</span>
-                        </div>
-                        <span className="unit-plan-image-frame">
-                          <img src={unit.src} alt={unit.name} loading="lazy" decoding="async" />
-                          <span className="plan-zoom-icon" aria-hidden="true">
-                            <Maximize2 size={22} />
-                          </span>
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Slide 2: Types E - H */}
-                  <div className="unit-slide-grid">
-                    {selectedTower.units.slice(4, 8).map((unit, index) => (
-                      <button
-                        className="unit-plan-card"
-                        type="button"
-                        key={unit.src}
-                        onClick={() => setActiveUnitIndex(index + 4)}
-                        aria-label={`Open ${unit.name}`}
-                      >
-                        <div className="unit-card-header">
-                          <span className="unit-badge">TYPE {unit.type}</span>
-                        </div>
-                        <span className="unit-plan-image-frame">
-                          <img src={unit.src} alt={unit.name} loading="lazy" decoding="async" />
-                          <span className="plan-zoom-icon" aria-hidden="true">
-                            <Maximize2 size={22} />
-                          </span>
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <button
-                className="tower-slider-arrow is-right"
-                type="button"
-                onClick={() => setUnitSlideIndex((prev) => Math.min(totalUnitSlides - 1, prev + 1))}
-                disabled={unitSlideIndex === totalUnitSlides - 1}
-                aria-label="Next unit plans page"
-              >
-                <ChevronRight size={26} strokeWidth={2.2} />
-              </button>
-            </div>
-
-            {/* Slide Dots Indicator */}
-            <div className="tower-slider-dots">
-              {Array.from({ length: totalUnitSlides }).map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`tower-slider-dot ${idx === unitSlideIndex ? "is-active" : ""}`}
-                  onClick={() => setUnitSlideIndex(idx)}
-                  type="button"
-                  aria-label={`Go to unit plans page ${idx + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        ) : (
-          /* Tower Selection View with Paginated Slider (2 Images per Slide) */
-          <div
-            className="tower-slider-container"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className="tower-slider-wrapper">
-              <button
-                className="tower-slider-arrow is-left"
-                type="button"
-                onClick={() => setCurrentSlideIndex((prev) => Math.max(0, prev - 1))}
-                disabled={currentSlideIndex === 0}
-                aria-label="Previous tower plans"
-              >
-                <ChevronLeft size={26} strokeWidth={2.2} />
-              </button>
-
-              <div className="tower-slider-viewport">
-                <div
-                  className="tower-slider-track"
-                  style={{ transform: `translateX(-${currentSlideIndex * 100}%)` }}
-                >
-                  {/* Slide 1 */}
-                  <div className="tower-slide">
-                    {towerPlans.slice(0, 2).map((tower) => (
-                      <button
-                        className="tower-plan-card"
-                        type="button"
-                        key={tower.id}
-                        onClick={() => openTower(tower.id)}
-                        aria-label={`Open ${tower.name} unit plans`}
-                      >
-                        <span className="tower-plan-image-frame">
-                          <img src={tower.planSrc} alt={`${tower.name} plan`} decoding="async" />
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Slide 2 */}
-                  <div className="tower-slide">
-                    {towerPlans.slice(2, 4).map((tower) => (
-                      <button
-                        className="tower-plan-card"
-                        type="button"
-                        key={tower.id}
-                        onClick={() => openTower(tower.id)}
-                        aria-label={`Open ${tower.name} unit plans`}
-                      >
-                        <span className="tower-plan-image-frame">
-                          <img src={tower.planSrc} alt={`${tower.name} plan`} decoding="async" />
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <button
-                className="tower-slider-arrow is-right"
-                type="button"
-                onClick={() => setCurrentSlideIndex((prev) => Math.min(totalTowerSlides - 1, prev + 1))}
-                disabled={currentSlideIndex === totalTowerSlides - 1}
-                aria-label="Next tower plans"
-              >
-                <ChevronRight size={26} strokeWidth={2.2} />
-              </button>
-            </div>
-
-            {/* Slide Navigation Indicator Dots */}
-            <div className="tower-slider-dots">
-              {Array.from({ length: totalTowerSlides }).map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`tower-slider-dot ${idx === currentSlideIndex ? "is-active" : ""}`}
-                  onClick={() => setCurrentSlideIndex(idx)}
-                  type="button"
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+      <section className="plans-page plans-page-master-only">
+        <button
+          className="master-plan-image-frame master-plan-image-button"
+          type="button"
+          onClick={() => setIsEnlarged(true)}
+          aria-label="Enlarge master plan"
+        >
+          <img src={MASTER_PLAN_SRC} alt="Vinayak 21 Acres Master Plan" decoding="async" />
+          <span className="master-plan-enlarge-hint">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h6v6" />
+              <path d="M9 21H3v-6" />
+              <path d="M21 3l-7 7" />
+              <path d="M3 21l7-7" />
+            </svg>
+            Click to enlarge
+          </span>
+        </button>
       </section>
 
-      {/* Fullscreen Lightbox Modal with Phone Gallery Style Bottom Thumbnail Preview Rail */}
-      {activeUnit && (
-        <div
-          className="plan-lightbox"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${activeUnit.name} full-screen preview`}
-          onClick={closeUnitPreview}
-        >
-          <div className="plan-lightbox-toolbar">
-            <div>
-              <span>{selectedTower.name}</span>
-              <strong>Type {activeUnit.type}</strong>
-            </div>
-            <button className="popup-close-neumorphism" type="button" onClick={closeUnitPreview} aria-label="Close unit plan">
-              <X size={24} aria-hidden="true" />
-            </button>
-          </div>
-
+      {isEnlarged && (
+        <div className="location-popup" role="dialog" aria-modal="true" onClick={() => setIsEnlarged(false)}>
           <button
-            className="plan-lightbox-arrow is-previous"
+            className="popup-close popup-close-neumorphism"
             type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              showPreviousUnit();
-            }}
-            aria-label="Show previous unit plan"
+            onClick={() => setIsEnlarged(false)}
+            aria-label="Close enlarged master plan"
           >
-            <ChevronLeft size={38} aria-hidden="true" />
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="26" height="26">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
-
-          <div
-            className={`plan-lightbox-image-stage ${lightboxZoom > 1 ? "is-zoomed" : ""}`}
-            onClick={(event) => event.stopPropagation()}
-            onWheel={handleLightboxWheel}
-            onPointerDown={handleLightboxPointerDown}
-            onPointerMove={handleLightboxPointerMove}
-            onPointerUp={handleLightboxPointerUp}
-            onPointerCancel={() => {
-              lightboxGestureRef.current = null;
-            }}
-            onTouchStart={handleLightboxTouchStart}
-            onTouchMove={handleLightboxTouchMove}
-            onDoubleClick={() => changeLightboxZoom(lightboxZoom > 1 ? 1 : 2)}
-          >
+          <div className="popup-content" ref={containerRef} onClick={(e) => e.stopPropagation()}>
             <img
-              className="plan-lightbox-image"
-              src={activeUnit.src}
-              alt={activeUnit.name}
-              draggable="false"
-              style={{
-                transform: `translate3d(${lightboxOffset.x}px, ${lightboxOffset.y}px, 0) scale(${lightboxZoom})`,
-              }}
+              ref={imgRef}
+              className="popup-image"
+              src={MASTER_PLAN_SRC}
+              alt="Vinayak 21 Acres Master Plan"
+              decoding="async"
+              onLoad={recomputeRect}
             />
+
+            {imageRect &&
+              ALL_HOTSPOTS.map((hotspot) => {
+                const hasImage = Boolean(TOWER_PLAN_DATA[hotspot.id]);
+                return (
+                  <button
+                    key={hotspot.id}
+                    type="button"
+                    className="tower-tap-indicator"
+                    style={{
+                      left: imageRect.left + (hotspot.xPct / 100) * imageRect.width,
+                      top: imageRect.top + (hotspot.yPct / 100) * imageRect.height,
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (hasImage) setActiveTowerId(hotspot.id);
+                    }}
+                    aria-label={`View ${hotspot.id}`}
+                    disabled={!hasImage}
+                  >
+                    <span className="tower-tap-ripple" />
+                    <span className="tower-tap-badge">
+                      <Hand size={18} strokeWidth={2.2} />
+                    </span>
+                  </button>
+                );
+              })}
           </div>
 
-          <button
-            className="plan-lightbox-arrow is-next"
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              showNextUnit();
-            }}
-            aria-label="Show next unit plan"
-          >
-            <ChevronRight size={38} aria-hidden="true" />
-          </button>
-
-          {/* Bottom Phone Gallery Style Thumbnail Strip */}
-          <div className="plan-lightbox-thumbs-bar" onClick={(e) => e.stopPropagation()}>
-            <div className="plan-lightbox-thumbs-rail" ref={lightboxRailRef}>
-              {selectedTower.units.map((unit, idx) => (
-                <button
-                  key={unit.src}
-                  className={`plan-lightbox-thumb ${idx === activeUnitIndex ? "is-active" : ""}`}
-                  onClick={() => setActiveUnitIndex(idx)}
-                  type="button"
-                  title={`Type ${unit.type}`}
-                >
-                  <img src={unit.src} alt={unit.name} />
-                  <span className="plan-thumb-label">TYPE {unit.type}</span>
-                </button>
-              ))}
-            </div>
-            <span className="plan-lightbox-progress">
-              {activeUnitIndex + 1} / {selectedTower.units.length}
-            </span>
-          </div>
+          {activeTowerData && (
+            <TowerPlanViewer
+              towerId={activeTowerId}
+              overviewSrc={activeTowerData.overview}
+              unitImages={activeTowerData.units}
+              onClose={() => setActiveTowerId(null)}
+            />
+          )}
         </div>
       )}
     </InteriorLayout>
