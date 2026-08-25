@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build:renderer"
+  publish = "dist"
+
+# index.html must always revalidate so visitors get the current build's
+# hashed JS/CSS references instead of a stale cached shell.
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Media and other static assets rarely change; cache them for a week so
+# repeat visits don't re-download multi-MB images/videos.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
